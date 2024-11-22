@@ -7,6 +7,7 @@ import google from '../../assets/images/google.png';
 import kakao from '../../assets/images/kakao.png';
 import naver from '../../assets/images/naver.png';
 
+
 function Login() {
     const dispatch = useDispatch();
     const navigate = useNavigate(); // 리다이렉션을 위해 useNavigate 훅 사용
