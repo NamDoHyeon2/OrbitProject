@@ -1,20 +1,14 @@
-import React, {useEffect, useState} from 'react';
-import axios from 'axios';
+import React from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
+import AppRoutes from './routes/AppRoutes';
+import './styles/Global.module.css'; // 전역 스타일 적용
 
 function App() {
-  const [hello, setHello] = useState('')
-
-  useEffect(() => {
-    axios.get('/api/hello')
-        .then(response => setHello(response.data))
-        .catch(error => console.log(error))
-  }, []);
-
-  return (
-      <div>
-        백엔드에서 가져온 asdadsasd : {hello}
-      </div>
-  );
+    return (
+        <Router>
+            <AppRoutes />
+        </Router>
+    );
 }
 
 export default App;
