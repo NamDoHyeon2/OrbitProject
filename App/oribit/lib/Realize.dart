@@ -49,3 +49,46 @@
   -child : 상위 위젯의 return 을 정해준다. // 렌더링 성능 최적화 및 불필요한 빌드 방지
   1. context와 child는 프레임워크에서 자동으로 주입시켜주기 때문에 괜찮다.
  */
+
+/*
+  Timer 위젯 : 일정 시간이 지난후에, 사용자가 지정한 콜백 함수를 실행
+
+  -Duration이라는 위젯을 인자 와, 실행할 함수를 인자로 받는다..
+  -Duration에는
+    -seconds 초
+    -milliseconds 밀리초
+    -minutes 분
+    -hours 시
+   가 포함되어있음
+ */
+
+/*
+  routes : 이동할 페이즈들을 String 과 context로 Mapping 한다.
+  ex) '/' : (context) MainPage(),
+
+  Navigator.pushNamed	새 화면을 추가 (뒤로 가기 가능)
+  Navigator.pushReplacementNamed	현재 화면을 대체 (뒤로 가기 불가능)
+  Navigator.pop	현재 화면 닫기 (이전 화면으로 돌아감)
+  Navigator.push	커스텀 전환 효과 등 직접 설정 가능
+
+  -routes로 지정된 Widget들은 Navigator가 관리 할 수있다.
+  -위젯 트리는 Stack의 형태로 이루어져있다.
+
+  -순서
+  Navigator.pushNamed(context, "/home")
+  프레임워크는, /home을 읽고 /home과 연결된 위젯을 반환한다.
+  이때 현제 화면의 context를 넘겨줌으로써,
+  부모위젯과 자식위젯은 서로 연결되게 된다.
+ */
+
+/*
+ 가운대 정렬 :
+  mainAxisAlignment: MainAxisAlignment.center, // 세로 중앙 정렬
+          crossAxisAlignment: CrossAxisAlignment.center, // 가로 중앙 정렬
+ */
+
+
+/*
+  아키 텍쳐 전략 : Clean Architecture
+
+ */
