@@ -1,4 +1,4 @@
-import 'package:oribit/login_page.dart';
+import 'package:oribit/presentation/login/login_page.dart';
 // This is a basic Flutter widget test.
 //
 // To perform an interaction with a widget in your test, use the WidgetTester
