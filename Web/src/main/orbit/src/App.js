@@ -1,14 +1,18 @@
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 import AppRoutes from './routes/AppRoutes';
-import './styles/Global.module.css'; // 전역 스타일 적용
 
-function App() {
+const App = () => {
+    const clientId = '871036489093-hkfl3tack8d6d8puumpas6a0qt22jvgq.apps.googleusercontent.com';
+
     return (
-        <Router>
-            <AppRoutes />
-        </Router>
+        <GoogleOAuthProvider clientId={clientId}>
+            <Router>
+                <AppRoutes />
+            </Router>
+        </GoogleOAuthProvider>
     );
-}
+};
 
 export default App;

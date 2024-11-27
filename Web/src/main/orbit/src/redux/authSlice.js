@@ -11,14 +11,15 @@ const authSlice = createSlice({
     reducers: {
         login(state, action) {
             state.isAuthenticated = true;
-            state.user = action.payload; // 로그인 시 사용자 데이터를 저장
+            state.user = action.payload; // 사용자 정보 저장
         },
         logout(state) {
             state.isAuthenticated = false;
-            state.user = null; // 로그아웃 시 사용자 데이터를 초기화
+            state.user = null; // 상태 초기화
         },
     },
 });
 
 export const { login, logout } = authSlice.actions;
 export default authSlice.reducer;
+

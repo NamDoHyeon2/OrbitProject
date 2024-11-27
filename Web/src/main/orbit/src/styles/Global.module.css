@@ -3,15 +3,17 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+
 }
 
 html, body {
-    font-family: 'Arial', sans-serif;
+    font-family: 'Pretendard', sans-serif;
     font-size: 16px;
     color: #333;
     background-color: #f8f9fa;
     height: 100%;
     overflow-x: hidden;
+    scroll-behavior: smooth;
 }
 
 /* 전역 컨테이너 */
