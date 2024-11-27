@@ -1,20 +1,18 @@
-import React, {useEffect, useState} from 'react';
-import axios from 'axios';
+import React from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import AppRoutes from './routes/AppRoutes';
 
-function App() {
-  const [hello, setHello] = useState('')
+const App = () => {
+    const clientId = '871036489093-hkfl3tack8d6d8puumpas6a0qt22jvgq.apps.googleusercontent.com';
 
-  useEffect(() => {
-    axios.get('/api/hello')
-        .then(response => setHello(response.data))
-        .catch(error => console.log(error))
-  }, []);
-
-  return (
-      <div>
-        백엔드에서 가져온 asdadsasd : {hello}
-      </div>
-  );
-}
+    return (
+        <GoogleOAuthProvider clientId={clientId}>
+            <Router>
+                <AppRoutes />
+            </Router>
+        </GoogleOAuthProvider>
+    );
+};
 
 export default App;
