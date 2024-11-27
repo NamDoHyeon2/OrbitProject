@@ -34,7 +34,7 @@ class SpringSecurityConfig {
         //인증 경로
         http.authorizeExchange{ auth ->
             auth
-                .pathMatchers("/api/auth/login","/api/auth/register").permitAll() // 인증이 필요 없는 경로 설정
+                .pathMatchers("/api/auth/login","/api/member/register").permitAll() // 인증이 필요 없는 경로 설정
                 .anyExchange().authenticated() // 나머지 경로는 인증 필수
         }
 
@@ -49,6 +49,7 @@ class SpringSecurityConfig {
                 frameOptions.mode(XFrameOptionsServerHttpHeadersWriter.Mode.SAMEORIGIN)
             }
         }
+        //로그인 진행을 위한 로그인 필터 추가 예정
 
 //        http.addFilterBefore(authenticationWebFilter(), SecurityWebFiltersOrder.AUTHENTICATION)
 
