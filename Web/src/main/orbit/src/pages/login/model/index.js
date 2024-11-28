@@ -1,30 +1,23 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { googleLogin } from '../api/googleLogin'; // Google 로그인 API
 import { login } from '@/app/redux/authSlice';
 import LoginPage from '../ui';
 
 export const LoginModel = () => {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-
-        const userData = { username, password };
-        dispatch(login(userData));
-        navigate('/dashboard'); // Dashboard로 리디렉션
+    const handleGoogleLogin = async (token) => {
+        try {
+            const userData = await googleLogin(token); // Google API 호출
+            dispatch(login(userData)); // Redux 상태 업데이트
+            navigate('/dashboard'); // 대시보드로 이동
+        } catch (error) {
+            console.error('Google Login Error:', error);
+        }
     };
 
-    return (
-        <LoginPage
-            username={username}
-            password={password}
-            setUsername={setUsername}
-            setPassword={setPassword}
-            handleSubmit={handleSubmit}
-        />
-    );
+    return <LoginPage handleGoogleLogin={handleGoogleLogin} />;
 };

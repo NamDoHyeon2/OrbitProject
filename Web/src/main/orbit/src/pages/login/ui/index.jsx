@@ -1,15 +1,55 @@
 import React from 'react';
-import { Link } from 'react-router-dom'; // Link 컴포넌트를 import
-import styles from './styles.module.css'; // styles import
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import '@/shared/style/global.css'; // 전역 스타일
+import styles from './styles.module.css';
 
 import google from '@/shared/assets/img/google-logo.png';
 import kakao from '@/shared/assets/img/kakao-logo.png';
 import naver from '@/shared/assets/img/naver-logo.png';
 import logo from '@/shared/assets/img/logo.png';
 
-const explanatoryText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+import { googleLogin } from '../api/googleLogin';
+import { kakaoLogin } from '../api/kakaoLogin';
+import { naverLogin } from '../api/naverLogin';
+import { login } from '@/app/redux/authSlice'; // Redux 액션 추가
 
-export const LoginPage = ({ username, password, rememberId, setUsername, setPassword, setRememberId, handleSubmit, googleLogin }) => {
+export const LoginPage = ({ username, password, rememberId, setUsername, setPassword, setRememberId, handleSubmit }) => {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    const handleGoogleButtonClick = async () => {
+        try {
+            const token = 'SAMPLE_GOOGLE_TOKEN'; // Google 토큰 발급 로직 필요
+            const userData = await googleLogin(token); // 서버와 통신
+            dispatch(login(userData)); // Redux 상태 업데이트
+            navigate('/dashboard'); // 대시보드로 이동
+        } catch (error) {
+            alert('Google login failed.');
+            console.error('Google Login Error:', error);
+        }
+    };
+
+    const handleKakaoLogin = async () => {
+        try {
+            const token = 'kakao-auth-token'; // 카카오 인증 토큰 가져오기
+            const data = await kakaoLogin(token);
+            console.log('Kakao Login Success:', data);
+        } catch (error) {
+            alert('Kakao login failed.');
+        }
+    };
+
+    const handleNaverLogin = async () => {
+        try {
+            const token = 'naver-auth-token'; // 네이버 인증 토큰 가져오기
+            const data = await naverLogin(token);
+            console.log('Naver Login Success:', data);
+        } catch (error) {
+            alert('Naver login failed.');
+        }
+    };
+
     return (
         <div className={styles.background}>
             <div className={styles.container}>
@@ -18,7 +58,7 @@ export const LoginPage = ({ username, password, rememberId, setUsername, setPass
                         <img src={logo} alt="Orbit Logo" className={styles.logo} />
                     </div>
                     <p className={styles.description}>
-                        {explanatoryText}
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque efficitur.
                     </p>
                 </div>
 
@@ -30,32 +70,25 @@ export const LoginPage = ({ username, password, rememberId, setUsername, setPass
                         <input
                             type="text"
                             id="username"
-                            name="username"
                             className={styles.input}
                             placeholder="아이디를 입력해주세요."
-                            required
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
                         />
-
                         <label htmlFor="password" className={styles.label}>패스워드</label>
                         <input
                             type="password"
                             id="password"
-                            name="password"
                             className={styles.input}
                             placeholder="패스워드를 입력해주세요."
-                            required
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                         />
-
                         <div className={styles.options}>
-                            <label htmlFor="rememberId" className={styles.checkbox}>
+                            <label className={styles.checkbox}>
                                 <input
                                     type="checkbox"
                                     id="rememberId"
-                                    name="rememberId"
                                     checked={rememberId}
                                     onChange={(e) => setRememberId(e.target.checked)}
                                 />
@@ -63,21 +96,25 @@ export const LoginPage = ({ username, password, rememberId, setUsername, setPass
                             </label>
                             <Link to="/forgot-password" className={styles.findPassword}>비밀번호 찾기</Link>
                         </div>
-
                         <div className={styles.socialLogin}>
-                            <button type="button" onClick={googleLogin} className={styles.socialButton}>
-                                <img src={google} alt="Google Login" className={styles.socialButtonimg} />
+                            <button
+                                className={`${styles.socialButton} ${styles.googleButton}`}
+                                onClick={handleGoogleButtonClick}
+                            >
+                                <img
+                                    src={google}
+                                    alt="Google"
+                                    className={styles.socialButtonimg}
+                                />
                             </button>
-                            <a href="http://localhost:5000/auth/kakao">
+                            <button type="button" onClick={handleKakaoLogin} className={styles.socialButton}>
                                 <img src={kakao} alt="Kakao Login" className={styles.socialButtonimg} />
-                            </a>
-                            <a href="http://localhost:5000/auth/naver">
+                            </button>
+                            <button type="button" onClick={handleNaverLogin} className={styles.socialButton}>
                                 <img src={naver} alt="Naver Login" className={styles.socialButtonimg} />
-                            </a>
+                            </button>
                         </div>
-
                         <button type="submit" className={styles.loginButton}>로그인</button>
-
                         <div className={styles.forgotPassword}>
                             <span className={styles.forgotPasswordText}>아이디가 없으신가요?</span>
                             <Link to="/signup" className={styles.signup}>회원가입</Link>
@@ -88,4 +125,5 @@ export const LoginPage = ({ username, password, rememberId, setUsername, setPass
         </div>
     );
 };
-export default LoginPage; // default export 추가
+
+export default LoginPage;
