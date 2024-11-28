@@ -88,3 +88,4 @@ export const LoginPage = ({ username, password, rememberId, setUsername, setPass
         </div>
     );
 };
+export default LoginPage; // default export 추가

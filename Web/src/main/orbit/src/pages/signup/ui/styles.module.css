@@ -1,0 +1,14 @@
+:root {
+    --primary-color: #007bff;
+    --background-color: #fff;
+}
+
+/* 기존 스타일 유지 및 개선 */
+.loginButton {
+    background: var(--primary-color);
+    color: var(--background-color);
+}
+
+.loginButton:hover {
+    background: darkblue;
+}

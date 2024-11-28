@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
     isAuthenticated: false,
     user: null,
+    signupSuccess: false,
 };
 
 const authSlice = createSlice({
@@ -18,7 +19,8 @@ const authSlice = createSlice({
             state.user = null;
         },
         signup(state, action) {
-            console.log('Signup Success:', action.payload);
+            state.signupSuccess = true; // 회원가입 성공 상태 추가
+            state.user = action.payload; // 회원가입 시 사용자 데이터 저장
         },
     },
 });

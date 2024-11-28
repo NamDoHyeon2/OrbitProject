@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { signup } from '@/app/redux/authSlice';
 import SignupPage from '../ui';
@@ -8,6 +9,7 @@ export const SignupModel = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const handleSubmit = (e) => {
@@ -19,9 +21,9 @@ export const SignupModel = () => {
         }
 
         const signupData = { username, email, password };
-        console.log('Signup Data:', signupData);
-
         dispatch(signup(signupData));
+        alert('회원가입이 완료되었습니다.');
+        navigate('/login'); // 로그인 화면으로 리디렉션
     };
 
     return (

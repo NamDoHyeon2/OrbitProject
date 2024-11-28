@@ -10,4 +10,4 @@ const App = () => {
     );
 };
 
-export default App; // default export 추가
+export default App;
