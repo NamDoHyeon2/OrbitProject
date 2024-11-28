@@ -26,7 +26,7 @@
 /* 왼쪽 패널 설정 */
 .leftPanel {
     width: 60%;
-    background: url('../../assets/images/Login_backImage.png') no-repeat center center / cover;
+    background: url('@/shared/assets/img/Login_backImage.png') no-repeat center center / cover;
     display: flex;
     flex-direction: column;
     justify-content: space-between;

@@ -11,15 +11,17 @@ const authSlice = createSlice({
     reducers: {
         login(state, action) {
             state.isAuthenticated = true;
-            state.user = action.payload; // 사용자 정보 저장
+            state.user = action.payload;
         },
         logout(state) {
             state.isAuthenticated = false;
-            state.user = null; // 상태 초기화
+            state.user = null;
+        },
+        signup(state, action) {
+            console.log('Signup Success:', action.payload);
         },
     },
 });
 
-export const { login, logout } = authSlice.actions;
+export const { login, logout, signup } = authSlice.actions;
 export default authSlice.reducer;
-
