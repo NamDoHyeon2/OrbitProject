@@ -43,6 +43,19 @@
 			<artifactId>reactor-kotlin-extensions</artifactId>
 		</dependency>
 
+		<!-- Spring Data R2DBC -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-r2dbc</artifactId>
+		</dependency>
+
+		<!-- R2DBC Driver for MySQL -->
+		<dependency>
+			<groupId>dev.miku</groupId>
+			<artifactId>r2dbc-mysql</artifactId>
+			<version>0.8.2.RELEASE</version>
+		</dependency>
+
 		<!-- Kotlin 관련 의존성 -->
 		<dependency>
 			<groupId>org.jetbrains.kotlin</groupId>

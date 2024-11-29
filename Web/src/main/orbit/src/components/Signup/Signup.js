@@ -14,11 +14,22 @@ function Signup() {
         setFormData({ ...formData, [name]: value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('Signup Data:', formData);
+        try {
+            // 서버로 POST 요청
+            const response = await axios.post('/api/member/register', {
+                id: formData.username, // 서버가 'id' 필드로 받는다면
+                email: formData.email,
+                passwd: formData.password,
+            });
+            console.log('회원가입 성공:', response.data);
+            alert('회원가입이 완료되었습니다!');
+        } catch (error) {
+            console.error('회원가입 실패:', error);
+            alert('회원가입 중 문제가 발생했습니다.');
+        }
     };
-
     return (
         <div className={styles.container}>
             <h1 className={styles.title}>회원가입</h1>

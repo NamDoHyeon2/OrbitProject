@@ -1,5 +1,9 @@
 package orbit.project.member.http
 
-class MemberResponse {
+data class MemberResponse(
+    val id: String,
+    val passwd: String,
+    val email: String,
+) {
 
 }
