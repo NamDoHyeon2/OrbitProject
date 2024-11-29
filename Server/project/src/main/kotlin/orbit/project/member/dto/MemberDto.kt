@@ -4,7 +4,7 @@ import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Table
 import java.time.LocalDateTime
 
-@Table("members") // 실제 DB 테이블 이름
+@Table("member") // 실제 DB 테이블 이름
 data class MemberDto(
     @Id
     val memberId: Long, // PK로 설정
