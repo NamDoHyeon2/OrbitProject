@@ -5,7 +5,6 @@ import orbit.project.config.securityException.CustomServerAuthenticationEntryPoi
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity
-import org.springframework.security.config.web.server.SecurityWebFiltersOrder
 import org.springframework.security.config.web.server.ServerHttpSecurity
 import org.springframework.security.web.server.SecurityWebFilterChain
 import org.springframework.security.web.server.context.WebSessionServerSecurityContextRepository
@@ -34,7 +33,7 @@ class SpringSecurityConfig {
         //인증 경로
         http.authorizeExchange{ auth ->
             auth
-                .pathMatchers("/api/auth/login","/api/member/register").permitAll() // 인증이 필요 없는 경로 설정
+                .pathMatchers("/api/auth/login","/api/members/register").permitAll() // 인증이 필요 없는 경로 설정
                 .anyExchange().authenticated() // 나머지 경로는 인증 필수
         }
 

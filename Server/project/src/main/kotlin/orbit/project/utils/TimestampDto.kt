@@ -2,10 +2,7 @@ package orbit.project.utils
 
 import java.time.LocalDateTime
 
-data class TimestampDto(
-    val createdAt : LocalDateTime,
-    val updatedAt : LocalDateTime = LocalDateTime.now() //호출시에 항상 업데이트 시간을 최신으로!
-) {
-
-
-}
+open class TimestampDto(
+    var createdAt: LocalDateTime ,
+    var updatedAt: LocalDateTime  // 기본값을 현재 시간으로 설정
+)
