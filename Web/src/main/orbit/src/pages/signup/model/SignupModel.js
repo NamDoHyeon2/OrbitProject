@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signup, googleSignup, kakaoSignup, naverSignup } from '../api/signupApi';
 import Signup from '../ui/Signup';
+import axios from 'axios';
 
 const SignupModel = () => {
     const [formData, setFormData] = useState({
