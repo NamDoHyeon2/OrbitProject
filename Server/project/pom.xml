@@ -56,12 +56,6 @@
 			<version>0.8.2.RELEASE</version>
 		</dependency>
 
-		<!-- Spring Boot Starter Web -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-
 		<!-- Spring Boot Starter OAuth2 Client -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

@@ -6,13 +6,21 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity
 import org.springframework.security.config.web.server.ServerHttpSecurity
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.server.SecurityWebFilterChain
 import org.springframework.security.web.server.context.WebSessionServerSecurityContextRepository
 import org.springframework.security.web.server.header.XFrameOptionsServerHttpHeadersWriter
 
+
 @Configuration
 @EnableWebFluxSecurity // WebFlux 보안 활성화
 class SpringSecurityConfig {
+
+    @Bean
+    fun getPasswordEncoder(): PasswordEncoder {
+        return BCryptPasswordEncoder()
+    }
 
     @Bean
     fun securityFilterChain(http: ServerHttpSecurity): SecurityWebFilterChain {

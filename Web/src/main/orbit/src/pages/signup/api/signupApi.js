@@ -4,10 +4,12 @@ import axios from 'axios';
 export const signup = async (formData) => {
     try {
         // 서버로 POST 요청
-        const response = await axios.post('/api/member/register', {
-            id: formData.username, // 서버가 'id' 필드로 받는다면
-            email: formData.email,
-            passwd: formData.password,
+        const response = await axios.post('/api/members/register', {
+            memberLoginId: formData.username, // 서버가 'id' 필드로 받는다면
+            memberEmail: formData.email,
+            memberPassword: formData.password,
+            memberName : "DoHyun", // 임시로 데이터 설정
+            memberAuthType : "USER" // 임시로 데이터 설정
         });
         console.log('회원가입 성공:', response.data);
         alert('회원가입이 완료되었습니다!');

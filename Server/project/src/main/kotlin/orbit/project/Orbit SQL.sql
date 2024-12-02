@@ -6,7 +6,7 @@ CREATE TABLE `orbit`.`Group` (
      PRIMARY KEY (`group_id`)
 );
 
-INSERT INTO `Group` (group_name) VALUES ('test_group');
+INSERT INTO `orbit`.`Group` (group_name) VALUES ('test_group');
 
 CREATE TABLE `orbit`.`Role` (
     `role_id` INT NOT NULL AUTO_INCREMENT,
@@ -16,7 +16,7 @@ CREATE TABLE `orbit`.`Role` (
     PRIMARY KEY (`role_id`)
 );
 
-INSERT INTO `Role` (role_name) VALUES ('test_role');
+INSERT INTO `orbit`.`Role` (role_name) VALUES ('test_role');
 
 CREATE TABLE `orbit`.`Member` (
   `member_id` INT NOT NULL AUTO_INCREMENT, 
@@ -25,7 +25,7 @@ CREATE TABLE `orbit`.`Member` (
   `name` VARCHAR(10) NOT NULL,          
   `email` VARCHAR(50) NOT NULL UNIQUE,
   `login_id` VARCHAR(255) NOT NULL,
-  `password` VARCHAR(25) NOT NULL,
+  `password` VARCHAR(100) NOT NULL,
   `auth_type` VARCHAR(15) NOT NULL, 
   `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,   
   `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, 
