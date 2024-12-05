@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { googleLogin } from '../api/googleLogin';
+import { googleLoginApi, kakaoLoginApi, naverLoginApi } from '../api';
 import { login } from '@/app/redux/authSlice';
 import LoginPage from '../ui';
 
@@ -11,7 +11,7 @@ const LoginModel = () => {
 
     const handleGoogleLogin = async (token) => {
         try {
-            const userData = await googleLogin(token);
+            const userData = await googleLoginApi(token);
             dispatch(login(userData));
             navigate('/dashboard');
         } catch (error) {
@@ -19,7 +19,33 @@ const LoginModel = () => {
         }
     };
 
-    return <LoginPage handleGoogleLogin={handleGoogleLogin} />;
+    const handleKakaoLogin = async (token) => {
+        try {
+            const userData = await kakaoLoginApi(token);
+            dispatch(login(userData));
+            navigate('/dashboard');
+        } catch (error) {
+            console.error('Kakao Login Error:', error);
+        }
+    };
+
+    const handleNaverLogin = async (token) => {
+        try {
+            const userData = await naverLoginApi(token);
+            dispatch(login(userData));
+            navigate('/dashboard');
+        } catch (error) {
+            console.error('Naver Login Error:', error);
+        }
+    };
+
+    return (
+        <LoginPage
+            handleGoogleLogin={handleGoogleLogin}
+            handleKakaoLogin={handleKakaoLogin}
+            handleNaverLogin={handleNaverLogin}
+        />
+    );
 };
 
 export default LoginModel;

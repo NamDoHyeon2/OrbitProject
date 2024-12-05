@@ -1,3 +1,5 @@
+// LoginPage.js
+
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -10,14 +12,9 @@ import kakaoIcon from '@/shared/assets/img/kakao-logo.png';
 import logo from '@/shared/assets/img/logo.png';
 
 import { login } from '@/app/redux/authSlice';
-import {
-    loginApi,
-    googleLoginApi,
-    kakaoLoginApi,
-    naverLoginApi,
-} from '../api';
+import { loginApi } from '../api';
 
-const LoginPage = () => {
+const LoginPage = ({ handleGoogleLogin, handleKakaoLogin, handleNaverLogin }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [rememberId, setRememberId] = useState(false);
@@ -31,40 +28,42 @@ const LoginPage = () => {
         const loadKakaoSDK = () => {
             if (!window.Kakao) {
                 const script = document.createElement('script');
-                script.src = 'https://developers.kakao.com/sdk/js/kakao.js';
+                script.src = 'https://developers.kakao.com/sdk/js/kakao.min.js';
                 script.onload = () => {
-                    const kakaoKey = process.env.REACT_APP_KAKAO_JAVASCRIPT_KEY;
-                    console.log('Kakao JavaScript Key:', kakaoKey);
-                    window.Kakao.init(kakaoKey);
+                    window.Kakao.init(process.env.REACT_APP_KAKAO_JAVASCRIPT_KEY);
+                    console.log('Kakao SDK Initialized');
                 };
                 document.body.appendChild(script);
             } else if (!window.Kakao.isInitialized()) {
-                const kakaoKey = process.env.REACT_APP_KAKAO_JAVASCRIPT_KEY;
-                console.log('Kakao JavaScript Key:', kakaoKey);
-                window.Kakao.init(kakaoKey);
+                window.Kakao.init(process.env.REACT_APP_KAKAO_JAVASCRIPT_KEY);
+                console.log('Kakao SDK Initialized');
             }
         };
 
-        // Naver SDK 로드
+        // Naver SDK 로드 및 초기화
         const loadNaverSDK = () => {
-            const script = document.createElement('script');
-            script.src = 'https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.2.js';
-            script.onload = () => {
-                console.log('Naver SDK Loaded:', window.naver);
-            };
-            document.body.appendChild(script);
+            if (!window.naver) {
+                const script = document.createElement('script');
+                script.src = 'https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.2.js';
+                script.onload = () => {
+                    console.log('Naver SDK Loaded');
+                };
+                document.body.appendChild(script);
+            }
         };
 
         // Google SDK 로드
         const loadGoogleSDK = () => {
-            const script = document.createElement('script');
-            script.src = 'https://accounts.google.com/gsi/client';
-            script.async = true;
-            script.defer = true;
-            script.onload = () => {
-                console.log('Google SDK Loaded');
-            };
-            document.body.appendChild(script);
+            if (!window.google) {
+                const script = document.createElement('script');
+                script.src = 'https://accounts.google.com/gsi/client';
+                script.async = true;
+                script.defer = true;
+                script.onload = () => {
+                    console.log('Google SDK Loaded');
+                };
+                document.body.appendChild(script);
+            }
         };
 
         loadKakaoSDK();
@@ -84,7 +83,7 @@ const LoginPage = () => {
         }
     };
 
-    const handleGoogleLogin = () => {
+    const handleGoogleLoginClick = () => {
         if (window.google) {
             const client = window.google.accounts.oauth2.initTokenClient({
                 client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
@@ -92,9 +91,7 @@ const LoginPage = () => {
                 callback: async (tokenResponse) => {
                     try {
                         const token = tokenResponse.access_token;
-                        const userData = await googleLoginApi(token);
-                        dispatch(login(userData));
-                        navigate('/dashboard');
+                        await handleGoogleLogin(token);
                     } catch (error) {
                         setError('Google 로그인에 실패했습니다.');
                         console.error('Google Login Error:', error);
@@ -107,27 +104,30 @@ const LoginPage = () => {
         }
     };
 
-    const handleKakaoLogin = () => {
-        window.Kakao.Auth.login({
-            success: async (authObj) => {
-                try {
-                    const token = authObj.access_token;
-                    const userData = await kakaoLoginApi(token);
-                    dispatch(login(userData));
-                    navigate('/dashboard');
-                } catch (error) {
+    const handleKakaoLoginClick = () => {
+        if (window.Kakao && window.Kakao.Auth) {
+            window.Kakao.Auth.login({
+                scope: 'profile_nickname', //값
+                success: async (authObj) => {
+                    try {
+                        const token = authObj.access_token;
+                        await handleKakaoLogin(token);
+                    } catch (error) {
+                        setError('Kakao 로그인에 실패했습니다.');
+                        console.error('Kakao Login Error:', error);
+                    }
+                },
+                fail: (err) => {
                     setError('Kakao 로그인에 실패했습니다.');
-                    console.error('Kakao Login Error:', error);
-                }
-            },
-            fail: (err) => {
-                setError('Kakao 로그인에 실패했습니다.');
-                console.error('Kakao Login Error:', err);
-            },
-        });
+                    console.error('Kakao Login Error:', err);
+                },
+            });
+        } else {
+            setError('Kakao SDK 로드 중 오류가 발생했습니다.');
+        }
     };
 
-    const handleNaverLogin = () => {
+    const handleNaverLoginClick = () => {
         const naverLogin = new window.naver.LoginWithNaverId({
             clientId: process.env.REACT_APP_NAVER_CLIENT_ID,
             callbackUrl: 'http://localhost:3000/oauth/callback/naver',
@@ -139,9 +139,7 @@ const LoginPage = () => {
             if (status) {
                 try {
                     const token = naverLogin.accessToken.accessToken;
-                    const userData = await naverLoginApi(token);
-                    dispatch(login(userData));
-                    navigate('/dashboard');
+                    await handleNaverLogin(token);
                 } catch (error) {
                     setError('Naver 로그인에 실패했습니다.');
                     console.error('Naver Login Error:', error);
@@ -150,6 +148,7 @@ const LoginPage = () => {
                 setError('Naver 로그인에 실패했습니다.');
             }
         });
+        naverLogin.signIn();
     };
 
     return (
@@ -207,21 +206,21 @@ const LoginPage = () => {
                         <div className={styles.socialLogin}>
                             <button
                                 type="button"
-                                onClick={handleGoogleLogin}
+                                onClick={handleGoogleLoginClick}
                                 className={styles.socialButton}
                             >
                                 <img src={googleIcon} alt="Google Login" className={styles.socialButtonimg} />
                             </button>
                             <button
                                 type="button"
-                                onClick={handleNaverLogin}
+                                onClick={handleNaverLoginClick}
                                 className={styles.socialButton}
                             >
                                 <img src={naverIcon} alt="Naver Login" className={styles.socialButtonimg} />
                             </button>
                             <button
                                 type="button"
-                                onClick={handleKakaoLogin}
+                                onClick={handleKakaoLoginClick}
                                 className={styles.socialButton}
                             >
                                 <img src={kakaoIcon} alt="Kakao Login" className={styles.socialButtonimg} />
