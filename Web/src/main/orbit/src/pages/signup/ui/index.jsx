@@ -1,16 +1,17 @@
 import React from 'react';
-import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
 import styles from './styles.module.css';
 import logo from '@/shared/assets/img/logo.png';
+import googleIcon from '@/shared/assets/img/google-logo.png';
+import kakaoIcon from '@/shared/assets/img/kakao-logo.png';
+import naverIcon from '@/shared/assets/img/naver-logo.png';
 
 const SignupPage = ({
                         formData,
                         handleChange,
                         handleSubmit,
-                        handleGoogleLoginSuccess,
-                        handleGoogleLoginError,
-                        handleKakaoLogin,
-                        handleNaverLogin,
+                        handleGoogleSignup,
+                        handleKakaoSignup,
+                        handleNaverSignup,
                         loading,
                         error,
                         success,
@@ -65,17 +66,14 @@ const SignupPage = ({
             {success && <p className={styles.success}>회원가입 성공!</p>}
             {error && <p className={styles.error}>{error}</p>}
             <div className={styles.socialLogins}>
-                <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
-                    <GoogleLogin
-                        onSuccess={handleGoogleLoginSuccess}
-                        onError={handleGoogleLoginError}
-                    />
-                </GoogleOAuthProvider>
-                <button className={styles.kakaoButton} onClick={handleKakaoLogin}>
-                    카카오 로그인
+                <button className={styles.socialButton} onClick={handleGoogleSignup}>
+                    <img src={googleIcon} alt="Google Signup" className={styles.socialButtonImg} />
                 </button>
-                <button id="naverIdLogin" className={styles.naverButton} onClick={handleNaverLogin}>
-                    네이버 로그인
+                <button className={styles.socialButton} onClick={handleKakaoSignup}>
+                    <img src={kakaoIcon} alt="Kakao Signup" className={styles.socialButtonImg} />
+                </button>
+                <button className={styles.socialButton} onClick={handleNaverSignup}>
+                    <img src={naverIcon} alt="Naver Signup" className={styles.socialButtonImg} />
                 </button>
             </div>
         </div>
