@@ -11,7 +11,7 @@ const Signup = ({
                     handleGoogleLoginError,
                     handleKakaoLogin,
                     handleNaverLogin,
-                    handleNiceAuth,
+                    handleNiceAuth,      //나이스
                     loading,
                     error,
                     success,
@@ -61,7 +61,7 @@ const Signup = ({
                         required
                     />
 
-                    <button
+                    <button      //나이스 인증 버튼
                         type="button"
                         className={styles.button}
                         onClick={handleNiceAuth}

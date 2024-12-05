@@ -38,7 +38,7 @@ export const niceAuth = async (phoneNumber) => {
         const response = await axios.post(apiUrl, { phoneNumber }, {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer YOUR_API_KEY', // 나이스에서 제공받은 API 키
+                'Authorization': 'Bearer YOUR_API_KEY', // 나이스에서 받은 api 키가 필요한데 아직 없음
             },
         });
         return response.data;

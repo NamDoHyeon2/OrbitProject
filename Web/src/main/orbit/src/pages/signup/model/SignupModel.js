@@ -9,7 +9,6 @@ const SignupModel = () => {
         email: '',
         password: '',
         passwordCheck: '',
-        phoneNumber: '', // 추가
     });
 
     const [loading, setLoading] = useState(false);
@@ -121,7 +120,7 @@ const SignupModel = () => {
         setError('구글 로그인 중 오류가 발생했습니다. 다시 시도해주세요.');
     };
 
-    const handleNiceAuth = async () => {
+    const handleNiceAuth = async () => {           //나이스 api 파트
         setLoading(true);
         setError('');
         try {
@@ -143,7 +142,7 @@ const SignupModel = () => {
             handleGoogleLoginError={handleGoogleLoginError}
             handleKakaoLogin={kakaoSignup}
             handleNaverLogin={() => naverButtonRef.current?.click()}
-            handleNiceAuth={handleNiceAuth}
+            handleNiceAuth={handleNiceAuth}      //나이스 api 파트
             loading={loading}
             error={error}
             success={success}
