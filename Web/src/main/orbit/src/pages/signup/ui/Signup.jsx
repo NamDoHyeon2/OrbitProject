@@ -11,6 +11,7 @@ const Signup = ({
                     handleGoogleLoginError,
                     handleKakaoLogin,
                     handleNaverLogin,
+                    handleNiceAuth,
                     loading,
                     error,
                     success,
@@ -59,6 +60,32 @@ const Signup = ({
                         onChange={handleChange}
                         required
                     />
+
+                    <button
+                        type="button"
+                        className={styles.button}
+                        onClick={handleNiceAuth}
+                    >
+                        나이스 본인인증
+                    </button>
+                    {/*<label className={styles.label}>휴대폰 번호</label>*/}
+                    {/*<input*/}
+                    {/*    type="text"*/}
+                    {/*    name="phoneNumber"*/}
+                    {/*    id="phoneNumber"*/}
+                    {/*    className={styles.input}*/}
+                    {/*    value={formData.phoneNumber}*/}
+                    {/*    onChange={handleChange}*/}
+                    {/*    required*/}
+                    {/*/>*/}
+                    {/*<button*/}
+                    {/*    className={`${styles['signup-button']} ${styles['signup-passAuthButton']}`}*/}
+                    {/*    type="button"*/}
+                    {/*    onClick={handlePassAuth} // 정의된 handlePassAuth 사용*/}
+                    {/*    disabled={loading || formData.passVerified}*/}
+                    {/*>*/}
+                    {/*    {formData.passVerified ? '인증 완료' : 'PASS 인증'}*/}
+                    {/*</button>*/}
                     <button type="submit" className={styles.button} disabled={loading}>
                         {loading ? '회원가입 중...' : '회원가입'}
                     </button>
@@ -77,6 +104,7 @@ const Signup = ({
                         네이버 로그인
                     </button>
                 </div>
+
             </div>
         </GoogleOAuthProvider>
     );

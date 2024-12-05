@@ -28,3 +28,22 @@ export const naverSignup = () => {
     const loginButton = document.getElementById('naverIdLogin');
     loginButton.click();
 };
+
+
+
+// NICE 본인인증 API
+export const niceAuth = async (phoneNumber) => {
+    const apiUrl = 'https://nice.checkplus.co.kr/CheckPlusSafeModel/checkplus.cb'; // 나이스 본인 인증 API 엔드포인트
+    try {
+        const response = await axios.post(apiUrl, { phoneNumber }, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer YOUR_API_KEY', // 나이스에서 제공받은 API 키
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error('NICE 본인인증 중 오류:', error.response?.data || error.message);
+        throw error;
+    }
+};
