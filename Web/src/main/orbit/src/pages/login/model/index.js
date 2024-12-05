@@ -1,19 +1,19 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { googleLogin } from '../api/googleLogin'; // Google 로그인 API
+import { googleLogin } from '../api/googleLogin';
 import { login } from '@/app/redux/authSlice';
 import LoginPage from '../ui';
 
-export const LoginModel = () => {
+const LoginModel = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const handleGoogleLogin = async (token) => {
         try {
-            const userData = await googleLogin(token); // Google API 호출
-            dispatch(login(userData)); // Redux 상태 업데이트
-            navigate('/dashboard'); // 대시보드로 이동
+            const userData = await googleLogin(token);
+            dispatch(login(userData));
+            navigate('/dashboard');
         } catch (error) {
             console.error('Google Login Error:', error);
         }
@@ -21,3 +21,5 @@ export const LoginModel = () => {
 
     return <LoginPage handleGoogleLogin={handleGoogleLogin} />;
 };
+
+export default LoginModel;

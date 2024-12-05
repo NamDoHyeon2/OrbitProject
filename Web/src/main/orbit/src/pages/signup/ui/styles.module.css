@@ -136,6 +136,17 @@
     text-decoration: underline;
 }
 
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: #f9fafb;
+    padding: 20px;
+    font-family: 'Arial', sans-serif;
+}
+
 /* 반응형 디자인 */
 @media (max-width: 768px) {
     .form {

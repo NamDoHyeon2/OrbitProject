@@ -1,1 +1,2 @@
-export { LoginModel as default } from './model';
+import LoginPage from './ui';
+export default LoginPage;

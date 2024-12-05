@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { signup, googleSignup, kakaoSignup, naverSignup } from '../api/signupApi';
-import Signup from '../ui/Signup';
+import { signup, googleSignup, kakaoSignup, naverSignup } from '../api';
+import SignupPage from '../ui';
 
-const SignupModel = () => {
+const Index = () => {
     const [formData, setFormData] = useState({
         username: '',
         email: '',
         password: '',
         passwordCheck: '',
     });
-
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState(false);
@@ -20,31 +19,23 @@ const SignupModel = () => {
     useEffect(() => {
         // Kakao SDK 로드
         const loadKakaoSDK = () => {
-            if (window.Kakao) {
-                if (!window.Kakao.isInitialized()) {
-                    window.Kakao.init('1357752957088d46c210167828b9cc10');
-                }
-                return;
+            if (!window.Kakao || !window.Kakao.isInitialized()) {
+                const script = document.createElement('script');
+                script.src = 'https://developers.kakao.com/sdk/js/kakao.js';
+                script.onload = () => {
+                    window.Kakao.init(process.env.REACT_APP_KAKAO_CLIENT_ID);
+                };
+                document.body.appendChild(script);
             }
-            const script = document.createElement('script');
-            script.src = 'https://developers.kakao.com/sdk/js/kakao.js';
-            script.async = true;
-            script.onload = () => {
-                if (window.Kakao) {
-                    window.Kakao.init('1357752957088d46c210167828b9cc10');
-                }
-            };
-            document.body.appendChild(script);
         };
 
         // Naver SDK 로드
         const loadNaverSDK = () => {
             const script = document.createElement('script');
             script.src = 'https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.0.js';
-            script.async = true;
             script.onload = () => {
                 const naverLogin = new window.naver.LoginWithNaverId({
-                    clientId: 'CsgL4h2zg9T6Z7kzuN0_',
+                    clientId: process.env.REACT_APP_NAVER_CLIENT_ID,
                     callbackUrl: 'http://localhost:3000/oauth/callback/naver',
                     isPopup: false,
                     loginButton: { color: 'green', type: 3, height: 58 },
@@ -91,9 +82,7 @@ const SignupModel = () => {
             await googleSignup(credentialResponse.credential);
             setSuccess(true);
         } catch (error) {
-            setError(
-                error.response?.data?.message || 'Google 회원가입 중 오류가 발생했습니다.'
-            );
+            setError(error.response?.data?.message || 'Google 회원가입 중 오류가 발생했습니다.');
         }
     };
 
@@ -102,7 +91,7 @@ const SignupModel = () => {
     };
 
     return (
-        <Signup
+        <SignupPage
             formData={formData}
             handleChange={handleChange}
             handleSubmit={handleSubmit}
@@ -117,4 +106,4 @@ const SignupModel = () => {
     );
 };
 
-export default SignupModel;
+export default Index;
