@@ -2,8 +2,8 @@ import React from 'react';
 import styles from './styles.module.css';
 import logo from '@/shared/assets/img/logo.png';
 import googleIcon from '@/shared/assets/img/google-logo.png';
-import kakaoIcon from '@/shared/assets/img/kakao-logo.png';
-import naverIcon from '@/shared/assets/img/naver-logo.png';
+import kakaoIcon from '@/shared/assets/img/naver-logo.png';
+import naverIcon from '@/shared/assets/img/kakao-logo.png';
 
 const SignupPage = ({
                         formData,
