@@ -9,6 +9,7 @@ const SignupModel = () => {
         email: '',
         password: '',
         passwordCheck: '',
+        phoneNumber: '', // 추가됨
     });
 
     const [loading, setLoading] = useState(false);
@@ -18,8 +19,7 @@ const SignupModel = () => {
     const navigate = useNavigate();
     const naverButtonRef = useRef(null);
 
-    useEffect(() => {
-        // Kakao SDK 로드
+    useEffect(() => {  
         const loadKakaoSDK = () => {
             if (window.Kakao) {
                 if (!window.Kakao.isInitialized()) {
@@ -38,7 +38,6 @@ const SignupModel = () => {
             document.body.appendChild(script);
         };
 
-        // Naver SDK 로드
         const loadNaverSDK = () => {
             const script = document.createElement('script');
             script.src = 'https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.0.js';
@@ -91,6 +90,15 @@ const SignupModel = () => {
         }
 
         try {
+            // NICE 본인인증
+            const authResponse = await niceAuth(formData.phoneNumber);
+            if (!authResponse.success) {
+                setError('본인인증에 실패했습니다.');
+                setLoading(false);
+                return;
+            }
+
+            // 회원가입 진행
             await signup(formData);
             setSuccess(true);
             navigate('/login');
@@ -120,7 +128,7 @@ const SignupModel = () => {
         setError('구글 로그인 중 오류가 발생했습니다. 다시 시도해주세요.');
     };
 
-    const handleNiceAuth = async () => {           //나이스 api 파트
+    const handleNiceAuth = async () => {      //나이스 api 파트
         setLoading(true);
         setError('');
         try {
@@ -142,7 +150,7 @@ const SignupModel = () => {
             handleGoogleLoginError={handleGoogleLoginError}
             handleKakaoLogin={kakaoSignup}
             handleNaverLogin={() => naverButtonRef.current?.click()}
-            handleNiceAuth={handleNiceAuth}      //나이스 api 파트
+            handleNiceAuth={handleNiceAuth}   //나이스 api 파트
             loading={loading}
             error={error}
             success={success}
@@ -153,4 +161,5 @@ const SignupModel = () => {
 };
 
 export default SignupModel;
+
 
