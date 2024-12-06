@@ -7,10 +7,10 @@ const Signup = ({
                     formData,
                     handleChange,
                     handleSubmit,
-                    handleGoogleLoginSuccess,
-                    handleGoogleLoginError,
-                    handleKakaoLogin,
-                    handleNaverLogin,
+                    // handleGoogleLoginSuccess,
+                    // handleGoogleLoginError,
+                    // handleKakaoLogin,
+                    // handleNaverLogin,
                     handleNiceAuth,
                     loading,
                     error,
@@ -75,18 +75,18 @@ const Signup = ({
                 </form>
                 {success && <p className={styles.success}>회원가입 성공!</p>}
                 {error && <p className={styles.error}>{error}</p>}
-                <div className={styles.socialLogins}>
-                    <GoogleLogin
-                        onSuccess={handleGoogleLoginSuccess}
-                        onError={handleGoogleLoginError}
-                    />
-                    <button className={styles.kakaoButton} onClick={handleKakaoLogin}>
-                        카카오 회원가입
-                    </button>
-                    <button className={styles.naverButton} onClick={handleNaverLogin}>
-                        네이버 회원가입
-                    </button>
-                </div>
+                {/*<div className={styles.socialLogins}>*/}
+                {/*    <GoogleLogin*/}
+                {/*        onSuccess={handleGoogleLoginSuccess}*/}
+                {/*        onError={handleGoogleLoginError}*/}
+                {/*    />*/}
+                {/*    <button className={styles.kakaoButton} onClick={handleKakaoLogin}>*/}
+                {/*        카카오 회원가입*/}
+                {/*    </button>*/}
+                {/*    <button className={styles.naverButton} onClick={handleNaverLogin}>*/}
+                {/*        네이버 회원가입*/}
+                {/*    </button>*/}
+                {/*</div>*/}
             </div>
         </GoogleOAuthProvider>
     );
