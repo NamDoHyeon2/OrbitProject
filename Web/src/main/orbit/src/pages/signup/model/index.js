@@ -18,8 +18,8 @@ const SignupModel = () => {
 
     const navigate = useNavigate();
 
-    const [naverLogin, setNaverLogin] = useState(null);
-
+    // const [naverLogin, setNaverLogin] = useState(null);
+    //
     // useEffect(() => {
     //     // Kakao SDK 로드 및 초기화
     //     const loadKakaoSDK = () => {

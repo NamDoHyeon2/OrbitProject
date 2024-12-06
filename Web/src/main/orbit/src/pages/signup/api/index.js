@@ -15,8 +15,8 @@ export const signup = async (formData) => {
 //     });
 //     return response.data;
 // };
-//
-// // Kakao 회원가입 API
+
+// Kakao 회원가입 API
 // export const kakaoSignup = () => {
 //     if (window.Kakao && window.Kakao.Auth) {
 //         window.Kakao.Auth.authorize({
