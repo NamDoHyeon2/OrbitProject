@@ -1,2 +1,1 @@
-import LoginPage from './ui';
-export default LoginPage;
+export { default } from './ui/index';

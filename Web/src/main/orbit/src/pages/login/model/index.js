@@ -1,51 +1,60 @@
-import React from 'react';
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { googleLoginApi, kakaoLoginApi, naverLoginApi } from '../api';
-import { login } from '@/app/redux/authSlice';
-import LoginPage from '../ui';
+import authApi from '../api/index';
+import {kakaoSignup} from "@/pages/signup/api";
 
-const LoginModel = () => {
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-
-    const handleGoogleLogin = async (token) => {
+export const useAuthModel = () => {
+    // 이메일/비밀번호 로그인
+    const loginWithEmailPassword = async (email, password) => {
         try {
-            const userData = await googleLoginApi(token);
-            dispatch(login(userData));
-            navigate('/dashboard');
+            const userData = await authApi.loginWithEmailPassword(email, password);
+            console.log('Login Successful (Email/Password):', userData);
+            alert('로그인 성공!');
         } catch (error) {
-            console.error('Google Login Error:', error);
+            console.error('Login Failed (Email/Password):', error.response?.data?.message || error.message);
+            alert(error.response?.data?.message || '이메일/비밀번호 로그인에 실패했습니다.');
         }
     };
 
-    const handleKakaoLogin = async (token) => {
+    // 구글 로그인
+    const loginWithGoogle = async (token) => {
         try {
-            const userData = await kakaoLoginApi(token);
-            dispatch(login(userData));
-            navigate('/dashboard');
+            const userData = await authApi.loginWithGoogle(token);
+            console.log('Login Successful (Google):', userData);
+            alert('구글 로그인 성공!');
         } catch (error) {
-            console.error('Kakao Login Error:', error);
+            console.error('Login Failed (Google):', error.response?.data?.message || error.message);
+            alert(error.response?.data?.message || '구글 로그인에 실패했습니다.');
         }
     };
 
-    const handleNaverLogin = async (token) => {
+    // 카카오 로그인
+    const loginWithKakao = async () => {
+        kakaoSignup();
         try {
-            const userData = await naverLoginApi(token);
-            dispatch(login(userData));
-            navigate('/dashboard');
+            if (!window.Kakao || !window.Kakao.isInitialized()) {
+                window.Kakao.init(process.env.REACT_APP_KAKAO_JAVASCRIPT_KEY);
+            }
+
+            window.Kakao.Auth.login({
+                success: async (authObj) => {
+                    console.log('Kakao Login Success:', authObj);
+                    const userData = await authApi.loginWithKakao(authObj.access_token);
+                    console.log('Server Response:', userData);
+                    alert('카카오 로그인 성공!');
+                },
+                fail: (err) => {
+                    console.error('Kakao Login Failed:', err);
+                    alert('카카오 로그인에 실패했습니다.');
+                },
+            });
         } catch (error) {
-            console.error('Naver Login Error:', error);
+            console.error('Login Failed (Kakao):', error.response?.data?.message || error.message);
+            alert(error.response?.data?.message || '카카오 로그인에 실패했습니다.');
         }
     };
 
-    return (
-        <LoginPage
-            handleGoogleLogin={handleGoogleLogin}
-            handleKakaoLogin={handleKakaoLogin}
-            handleNaverLogin={handleNaverLogin}
-        />
-    );
+    return {
+        loginWithEmailPassword,
+        loginWithGoogle,
+        loginWithKakao,
+    };
 };
-
-export default LoginModel;

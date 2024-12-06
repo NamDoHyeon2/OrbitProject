@@ -124,7 +124,6 @@ const SignupModel = () => {
         kakaoSignup();
     };
 
-    // 수정된 부분
     const handleNaverLogin = () => {
         if (naverLogin) {
             naverLogin.authorize(); // 로그인 프로세스 시작
