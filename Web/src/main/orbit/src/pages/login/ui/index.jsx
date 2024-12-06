@@ -1,128 +1,156 @@
-import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import '@/shared/style/global.css'; // 전역 스타일
-import styles from './styles.module.css';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+import { useAuthModel } from '../model/index';
 
-import google from '@/shared/assets/img/google-logo.png';
-import kakao from '@/shared/assets/img/kakao-logo.png';
-import naver from '@/shared/assets/img/naver-logo.png';
-import logo from '@/shared/assets/img/logo.png';
+const LoginPage = () => {
+    const { loginWithEmailPassword, loginWithGoogle, loginWithKakao } = useAuthModel();
+    const [formData, setFormData] = useState({ email: '', password: '' });
+    const navigate = useNavigate(); // react-router-dom의 useNavigate 훅 사용
 
-import { googleLogin } from '../api/googleLogin';
-import { kakaoLogin } from '../api/kakaoLogin';
-import { naverLogin } from '../api/naverLogin';
-import { login } from '@/app/redux/authSlice'; // Redux 액션 추가
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+    };
 
-export const LoginPage = ({ username, password, rememberId, setUsername, setPassword, setRememberId, handleSubmit }) => {
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const { email, password } = formData;
 
-    const handleGoogleButtonClick = async () => {
-        try {
-            const token = 'SAMPLE_GOOGLE_TOKEN'; // Google 토큰 발급 로직 필요
-            const userData = await googleLogin(token); // 서버와 통신
-            dispatch(login(userData)); // Redux 상태 업데이트
-            navigate('/dashboard'); // 대시보드로 이동
-        } catch (error) {
-            alert('Google login failed.');
-            console.error('Google Login Error:', error);
+        if (!email || !password) {
+            alert('이메일과 비밀번호를 입력해주세요.');
+            return;
         }
+
+        try {
+            await loginWithEmailPassword(email, password);
+            navigate('/dashboard'); // 로그인 성공 시 대시보드로 이동
+        } catch (error) {
+            console.error('Login Failed:', error);
+        }
+    };
+
+    const handleGoogleLoginSuccess = async (response) => {
+        try {
+            await loginWithGoogle(response.credential);
+            navigate('/dashboard'); // 로그인 성공 시 대시보드로 이동
+        } catch (error) {
+            console.error('Google Login Failed:', error);
+        }
+    };
+
+    const handleGoogleLoginFailure = (error) => {
+        console.error('Google Login Failed:', error);
+        alert('구글 로그인에 실패했습니다.');
     };
 
     const handleKakaoLogin = async () => {
         try {
-            const token = 'kakao-auth-token'; // 카카오 인증 토큰 가져오기
-            const data = await kakaoLogin(token);
-            console.log('Kakao Login Success:', data);
+            await loginWithKakao();
+            navigate('/dashboard'); // 로그인 성공 시 대시보드로 이동
         } catch (error) {
-            alert('Kakao login failed.');
+            console.error('Kakao Login Failed:', error);
         }
     };
 
-    const handleNaverLogin = async () => {
-        try {
-            const token = 'naver-auth-token'; // 네이버 인증 토큰 가져오기
-            const data = await naverLogin(token);
-            console.log('Naver Login Success:', data);
-        } catch (error) {
-            alert('Naver login failed.');
-        }
+    const goToSignup = () => {
+        navigate('/signup'); // 회원가입 페이지로 이동
     };
 
     return (
-        <div className={styles.background}>
-            <div className={styles.container}>
-                <div className={styles.leftPanel}>
-                    <div className={styles.logoBox}>
-                        <img src={logo} alt="Orbit Logo" className={styles.logo} />
-                    </div>
-                    <p className={styles.description}>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque efficitur.
-                    </p>
-                </div>
+        <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
+            <div style={{ textAlign: 'center', margin: '50px auto', maxWidth: '400px' }}>
+                <h1>로그인</h1>
 
-                <div className={styles.rightPanel}>
-                    <h1 className={styles.title}>ORBIT</h1>
-                    <h2 className={styles.subtitle}>환영합니다!</h2>
-                    <form className={styles.loginForm} onSubmit={handleSubmit}>
-                        <label htmlFor="username" className={styles.label}>아이디</label>
+                <form onSubmit={handleSubmit} style={{ marginBottom: '30px', textAlign: 'left' }}>
+                    <h2>이메일/비밀번호 로그인</h2>
+
+                    <div style={{ marginBottom: '10px' }}>
+                        <label htmlFor="email">이메일:</label>
                         <input
-                            type="text"
-                            id="username"
-                            className={styles.input}
-                            placeholder="아이디를 입력해주세요."
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
+                            type="email"
+                            id="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            required
+                            style={{ width: '100%', padding: '8px', marginTop: '5px' }}
                         />
-                        <label htmlFor="password" className={styles.label}>패스워드</label>
+                    </div>
+
+                    <div style={{ marginBottom: '10px' }}>
+                        <label htmlFor="password">비밀번호:</label>
                         <input
                             type="password"
                             id="password"
-                            className={styles.input}
-                            placeholder="패스워드를 입력해주세요."
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
+                            name="password"
+                            value={formData.password}
+                            onChange={handleChange}
+                            required
+                            style={{ width: '100%', padding: '8px', marginTop: '5px' }}
                         />
-                        <div className={styles.options}>
-                            <label className={styles.checkbox}>
-                                <input
-                                    type="checkbox"
-                                    id="rememberId"
-                                    checked={rememberId}
-                                    onChange={(e) => setRememberId(e.target.checked)}
-                                />
-                                아이디 저장
-                            </label>
-                            <Link to="/forgot-password" className={styles.findPassword}>비밀번호 찾기</Link>
-                        </div>
-                        <div className={styles.socialLogin}>
-                            <button
-                                className={`${styles.socialButton} ${styles.googleButton}`}
-                                onClick={handleGoogleButtonClick}
-                            >
-                                <img
-                                    src={google}
-                                    alt="Google"
-                                    className={styles.socialButtonimg}
-                                />
-                            </button>
-                            <button type="button" onClick={handleKakaoLogin} className={styles.socialButton}>
-                                <img src={kakao} alt="Kakao Login" className={styles.socialButtonimg} />
-                            </button>
-                            <button type="button" onClick={handleNaverLogin} className={styles.socialButton}>
-                                <img src={naver} alt="Naver Login" className={styles.socialButtonimg} />
-                            </button>
-                        </div>
-                        <button type="submit" className={styles.loginButton}>로그인</button>
-                        <div className={styles.forgotPassword}>
-                            <span className={styles.forgotPasswordText}>아이디가 없으신가요?</span>
-                            <Link to="/signup" className={styles.signup}>회원가입</Link>
-                        </div>
-                    </form>
+                    </div>
+
+                    <button
+                        type="submit"
+                        style={{
+                            padding: '10px 20px',
+                            backgroundColor: '#007bff',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '5px',
+                            cursor: 'pointer',
+                            fontWeight: 'bold',
+                            width: '100%',
+                        }}
+                    >
+                        로그인
+                    </button>
+                </form>
+
+                <hr style={{ margin: '30px 0' }} />
+
+                <GoogleLogin
+                    onSuccess={handleGoogleLoginSuccess}
+                    onError={handleGoogleLoginFailure}
+                />
+
+                <button
+                    onClick={handleKakaoLogin}
+                    style={{
+                        marginTop: '20px',
+                        padding: '10px 20px',
+                        backgroundColor: '#FEE500',
+                        border: 'none',
+                        borderRadius: '5px',
+                        cursor: 'pointer',
+                        fontWeight: 'bold',
+                        width: '100%',
+                    }}
+                >
+                    Login with Kakao
+                </button>
+
+                <div style={{ marginTop: '20px' }}>
+                    <p>계정이 없으신가요?</p>
+                    <button
+                        onClick={goToSignup}
+                        style={{
+                            padding: '10px 20px',
+                            backgroundColor: '#6c757d',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '5px',
+                            cursor: 'pointer',
+                            fontWeight: 'bold',
+                            width: '100%',
+                        }}
+                    >
+                        회원가입
+                    </button>
                 </div>
             </div>
-        </div>
+        </GoogleOAuthProvider>
     );
 };
 

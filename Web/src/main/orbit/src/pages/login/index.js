@@ -1,1 +1,1 @@
-export { LoginModel as default } from './model';
+export { default } from './ui/index';

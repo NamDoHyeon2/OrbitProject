@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // 일반 회원가입 API
 export const signup = async (formData) => {
-    const response = await axios.post('https://blrblrblr.com', formData, {
+    const response = await axios.post('${API_BASE_URL}/signup', formData, {
         headers: { 'Content-Type': 'application/json' },
     });
     return response.data;
@@ -10,26 +10,23 @@ export const signup = async (formData) => {
 
 // Google 회원가입 API
 export const googleSignup = async (googleToken) => {
-    const response = await axios.post('http://localhost:3000/google-login', { token: googleToken }, {
+    const response = await axios.post('${API_BASE_URL}/google-signup', { token: googleToken }, {
         headers: { 'Content-Type': 'application/json' },
     });
     return response.data;
 };
 
 // Kakao 회원가입 API
-export const kakaoSignup = async () => {
-    window.Kakao.Auth.authorize({
-        redirectUri: 'http://localhost:3000/oauth/callback/kakao',
-    });
+export const kakaoSignup = () => {
+    if (window.Kakao && window.Kakao.Auth) {
+        window.Kakao.Auth.authorize({
+            redirectUri: 'http://localhost:3000/oauth/callback/kakao',
+        });
+    } else {
+        alert('카카오 SDK 로드 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+        console.error('Kakao SDK is not loaded.');
+    }
 };
-
-// Naver 회원가입 API
-export const naverSignup = () => {
-    const loginButton = document.getElementById('naverIdLogin');
-    loginButton.click();
-};
-
-
 
 // NICE 본인인증 API
 export const niceAuth = async (phoneNumber) => {
@@ -38,7 +35,7 @@ export const niceAuth = async (phoneNumber) => {
         const response = await axios.post(apiUrl, { phoneNumber }, {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': '키값', // 나이스에서 받은 api 키가 필요한데 아직 없음
+                'Authorization': 'Bearer YOUR_NICE_API_KEY', // 나이스에서 제공받은 API 키
             },
         });
         return response.data;
@@ -47,3 +44,5 @@ export const niceAuth = async (phoneNumber) => {
         throw error;
     }
 };
+
+// Naver 로그인 처리는 SignupModel에서 직접 수행합니다.

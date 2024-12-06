@@ -1,7 +1,7 @@
 import React from 'react';
 import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
 import styles from './styles.module.css';
-import logo from '../../../shared/assets/img/logo.png';
+import logo from '@/shared/assets/img/logo.png';
 
 const Signup = ({
                     formData,
@@ -11,16 +11,16 @@ const Signup = ({
                     handleGoogleLoginError,
                     handleKakaoLogin,
                     handleNaverLogin,
-                    handleNiceAuth,      //나이스
+                    handleNiceAuth,
                     loading,
                     error,
                     success,
                 }) => {
     return (
-        <GoogleOAuthProvider clientId="871036489093-hkfl3tack8d6d8puumpas6a0qt22jvgq.apps.googleusercontent.com">
+        <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
             <div className={styles.container}>
                 <div className={styles.logoBox}>
-                    <img className={styles.logo} src={logo} alt="orbitLogo" />
+                    <img className={styles.logo} src={logo} alt="Orbit Logo" />
                 </div>
                 <h1 className={styles.title}>회원가입</h1>
                 <form className={styles.form} onSubmit={handleSubmit}>
@@ -61,7 +61,7 @@ const Signup = ({
                         required
                     />
 
-                    <button      //나이스 인증 버튼
+                    <button
                         type="button"
                         className={styles.button}
                         onClick={handleNiceAuth}
@@ -75,19 +75,18 @@ const Signup = ({
                 </form>
                 {success && <p className={styles.success}>회원가입 성공!</p>}
                 {error && <p className={styles.error}>{error}</p>}
-                {/*<div className={styles.socialLogins}>*/}
-                {/*    <GoogleLogin*/}
-                {/*        onSuccess={handleGoogleLoginSuccess}*/}
-                {/*        onError={handleGoogleLoginError}*/}
-                {/*    />*/}
-                {/*    <button className={styles.kakaoButton} onClick={handleKakaoLogin}>*/}
-                {/*        카카오 로그인*/}
-                {/*    </button>*/}
-                {/*    <button id="naverIdLogin" className={styles.naverButton} onClick={handleNaverLogin}>*/}
-                {/*        네이버 로그인*/}
-                {/*    </button>*/}
-                {/*</div>*/}
-
+                <div className={styles.socialLogins}>
+                    <GoogleLogin
+                        onSuccess={handleGoogleLoginSuccess}
+                        onError={handleGoogleLoginError}
+                    />
+                    <button className={styles.kakaoButton} onClick={handleKakaoLogin}>
+                        카카오 회원가입
+                    </button>
+                    <button className={styles.naverButton} onClick={handleNaverLogin}>
+                        네이버 회원가입
+                    </button>
+                </div>
             </div>
         </GoogleOAuthProvider>
     );

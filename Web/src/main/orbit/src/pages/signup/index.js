@@ -1,2 +1,2 @@
-import SignupModel from './model/SignupModel';
+import SignupModel from './model';
 export default SignupModel;

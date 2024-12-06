@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { signup, googleSignup, kakaoSignup, niceAuth } from '../api/signupApi';
-import Signup from '../ui/Signup';
+import { signup, googleSignup, kakaoSignup, niceAuth } from '../api/index';
+import Signup from '../ui/index';
 
 const SignupModel = () => {
     const [formData, setFormData] = useState({
@@ -9,7 +9,7 @@ const SignupModel = () => {
         email: '',
         password: '',
         passwordCheck: '',
-        phoneNumber: '', // 추가됨
+        phoneNumber: '',
     });
 
     const [loading, setLoading] = useState(false);
@@ -17,58 +17,55 @@ const SignupModel = () => {
     const [success, setSuccess] = useState(false);
 
     const navigate = useNavigate();
-    const naverButtonRef = useRef(null);
+
+    const [naverLogin, setNaverLogin] = useState(null);
 
     useEffect(() => {
+        // Kakao SDK 로드 및 초기화
         const loadKakaoSDK = () => {
-            if (window.Kakao) {
-                if (!window.Kakao.isInitialized()) {
-                    window.Kakao.init('1357752957088d46c210167828b9cc10');
-                }
-                return;
+            if (!window.Kakao) {
+                const script = document.createElement('script');
+                script.src = 'https://developers.kakao.com/sdk/js/kakao.js';
+                script.async = true;
+                script.onload = () => {
+                    if (window.Kakao) {
+                        window.Kakao.init(process.env.REACT_APP_KAKAO_JAVASCRIPT_KEY);
+                        console.log('Kakao SDK Initialized');
+                    }
+                };
+                document.body.appendChild(script);
+            } else if (!window.Kakao.isInitialized()) {
+                window.Kakao.init(process.env.REACT_APP_KAKAO_JAVASCRIPT_KEY);
+                console.log('Kakao SDK Initialized');
             }
-            const script = document.createElement('script');
-            script.src = 'https://developers.kakao.com/sdk/js/kakao.js';
-            script.async = true;
-            script.onload = () => {
-                if (window.Kakao) {
-                    window.Kakao.init('1357752957088d46c210167828b9cc10');
-                }
-            };
-            document.body.appendChild(script);
         };
 
-        if (window._babelPolyfill) {
-            delete window._babelPolyfill;
-        }
-
+        // Naver SDK 로드 및 초기화
         const loadNaverSDK = () => {
             const script = document.createElement('script');
-            script.src = 'https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.0.js';
+            script.src = 'https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.2.js';
             script.async = true;
-
             script.onload = () => {
-                try {
-                    const callbackUrl =
-                        process.env.REACT_APP_NAVER_CALLBACK_URL || 'http://localhost:3000/oauth/callback/naver';
-
+                if (window.naver) {
+                    // 네이버 로그인 객체 생성 및 초기화
                     const naverLogin = new window.naver.LoginWithNaverId({
-                        clientId: 'CsgL4h2zg9T6Z7kzuN0_',
-                        callbackUrl: callbackUrl,
-                        isPopup: false,
-                        loginButton: { color: 'green', type: 3, height: 58 },
+                        clientId: process.env.REACT_APP_NAVER_CLIENT_ID,
+                        callbackUrl:
+                            process.env.REACT_APP_NAVER_CALLBACK_URL || 'http://localhost:3000/oauth/callback/naver',
+                        isPopup: true,
                     });
                     naverLogin.init();
-                } catch (error) {
-                    console.error('Naver SDK 초기화 중 오류 발생:', error);
+
+                    // 로그인 객체를 상태에 저장
+                    setNaverLogin(naverLogin);
+                    console.log('Naver SDK Initialized');
+                } else {
+                    console.error('Naver SDK 로드 실패');
                 }
             };
-
             script.onerror = () => {
                 console.error('Naver SDK 로드 실패');
-                alert('Naver SDK 로드에 실패했습니다. 다시 시도해주세요.');
             };
-
             document.body.appendChild(script);
         };
 
@@ -118,11 +115,11 @@ const SignupModel = () => {
         setError('');
         try {
             await googleSignup(response.credential);
-            alert('구글 로그인 성공!');
+            alert('구글 회원가입 성공!');
             setSuccess(true);
             navigate('/dashboard');
         } catch (error) {
-            setError('구글 로그인 실패: ' + (error.response?.data?.message || error.message));
+            setError('구글 회원가입 실패: ' + (error.response?.data?.message || error.message));
         } finally {
             setLoading(false);
         }
@@ -132,7 +129,20 @@ const SignupModel = () => {
         setError('구글 로그인 중 오류가 발생했습니다. 다시 시도해주세요.');
     };
 
-    const handleNiceAuth = async () => {      //나이스 api 파트
+    const handleKakaoLogin = () => {
+        kakaoSignup();
+    };
+
+    const handleNaverLogin = () => {
+        if (naverLogin) {
+            naverLogin.authorize(); // 로그인 프로세스 시작
+        } else {
+            alert('네이버 SDK 로드 중입니다. 잠시 후 다시 시도해주세요.');
+            console.error('Naver Login 객체가 초기화되지 않았습니다.');
+        }
+    };
+
+    const handleNiceAuth = async () => {
         setLoading(true);
         setError('');
         try {
@@ -152,18 +162,14 @@ const SignupModel = () => {
             handleSubmit={handleSubmit}
             handleGoogleLoginSuccess={handleGoogleLoginSuccess}
             handleGoogleLoginError={handleGoogleLoginError}
-            handleKakaoLogin={kakaoSignup}
-            handleNaverLogin={() => naverButtonRef.current?.click()}
-            handleNiceAuth={handleNiceAuth}   //나이스 api 파트
+            handleKakaoLogin={handleKakaoLogin}
+            handleNaverLogin={handleNaverLogin}
+            handleNiceAuth={handleNiceAuth}
             loading={loading}
             error={error}
             success={success}
-        >
-            <div id="naverIdLogin" ref={naverButtonRef}></div>
-        </Signup>
+        />
     );
 };
 
 export default SignupModel;
-
-

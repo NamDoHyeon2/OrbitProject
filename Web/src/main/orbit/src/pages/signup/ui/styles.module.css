@@ -108,32 +108,28 @@
     justify-content: center;
 }
 
-.socialButton {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.kakaoButton,
+.naverButton {
     padding: 10px;
-    border: 1px solid #ddd;
+    border: none;
     border-radius: 5px;
-    font-size: 14px;
+    color: white;
     cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.socialButton:hover {
-    background-color: #f0f0f0;
-}
-
-/* 링크 스타일 */
-.link {
-    color: #007bff;
-    text-decoration: none;
     font-size: 14px;
-    margin-top: 10px;
 }
 
-.link:hover {
-    text-decoration: underline;
+.kakaoButton {
+    background-color: #fee500;
+    color: #3c1e1e;
+}
+
+.naverButton {
+    background-color: #03c75a;
+    color: white;
+}
+
+.socialLogins button:hover {
+    opacity: 0.8;
 }
 
 /* 반응형 디자인 */
