@@ -68,42 +68,25 @@ const Signup = ({
                     >
                         나이스 본인인증
                     </button>
-                    {/*<label className={styles.label}>휴대폰 번호</label>*/}
-                    {/*<input*/}
-                    {/*    type="text"*/}
-                    {/*    name="phoneNumber"*/}
-                    {/*    id="phoneNumber"*/}
-                    {/*    className={styles.input}*/}
-                    {/*    value={formData.phoneNumber}*/}
-                    {/*    onChange={handleChange}*/}
-                    {/*    required*/}
-                    {/*/>*/}
-                    {/*<button*/}
-                    {/*    className={`${styles['signup-button']} ${styles['signup-passAuthButton']}`}*/}
-                    {/*    type="button"*/}
-                    {/*    onClick={handlePassAuth} // 정의된 handlePassAuth 사용*/}
-                    {/*    disabled={loading || formData.passVerified}*/}
-                    {/*>*/}
-                    {/*    {formData.passVerified ? '인증 완료' : 'PASS 인증'}*/}
-                    {/*</button>*/}
+
                     <button type="submit" className={styles.button} disabled={loading}>
                         {loading ? '회원가입 중...' : '회원가입'}
                     </button>
                 </form>
                 {success && <p className={styles.success}>회원가입 성공!</p>}
                 {error && <p className={styles.error}>{error}</p>}
-                <div className={styles.socialLogins}>
-                    <GoogleLogin
-                        onSuccess={handleGoogleLoginSuccess}
-                        onError={handleGoogleLoginError}
-                    />
-                    <button className={styles.kakaoButton} onClick={handleKakaoLogin}>
-                        카카오 로그인
-                    </button>
-                    <button id="naverIdLogin" className={styles.naverButton} onClick={handleNaverLogin}>
-                        네이버 로그인
-                    </button>
-                </div>
+                {/*<div className={styles.socialLogins}>*/}
+                {/*    <GoogleLogin*/}
+                {/*        onSuccess={handleGoogleLoginSuccess}*/}
+                {/*        onError={handleGoogleLoginError}*/}
+                {/*    />*/}
+                {/*    <button className={styles.kakaoButton} onClick={handleKakaoLogin}>*/}
+                {/*        카카오 로그인*/}
+                {/*    </button>*/}
+                {/*    <button id="naverIdLogin" className={styles.naverButton} onClick={handleNaverLogin}>*/}
+                {/*        네이버 로그인*/}
+                {/*    </button>*/}
+                {/*</div>*/}
 
             </div>
         </GoogleOAuthProvider>

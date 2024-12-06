@@ -19,7 +19,7 @@ const SignupModel = () => {
     const navigate = useNavigate();
     const naverButtonRef = useRef(null);
 
-    useEffect(() => {  
+    useEffect(() => {
         const loadKakaoSDK = () => {
             if (window.Kakao) {
                 if (!window.Kakao.isInitialized()) {
@@ -37,6 +37,10 @@ const SignupModel = () => {
             };
             document.body.appendChild(script);
         };
+
+        if (window._babelPolyfill) {
+            delete window._babelPolyfill;
+        }
 
         const loadNaverSDK = () => {
             const script = document.createElement('script');
