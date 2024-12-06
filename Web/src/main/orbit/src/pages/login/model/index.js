@@ -1,5 +1,4 @@
 import authApi from '../api/index';
-import {kakaoSignup} from "@/pages/signup/api";
 
 export const useAuthModel = () => {
     // 이메일/비밀번호 로그인
@@ -15,9 +14,9 @@ export const useAuthModel = () => {
     };
 
     // 구글 로그인
-    const loginWithGoogle = async (token) => {
+    const loginWithGoogle = async (googleToken) => {
         try {
-            const userData = await authApi.loginWithGoogle(token);
+            const userData = await authApi.loginWithGoogle(googleToken);
             console.log('Login Successful (Google):', userData);
             alert('구글 로그인 성공!');
         } catch (error) {
@@ -27,28 +26,13 @@ export const useAuthModel = () => {
     };
 
     // 카카오 로그인
-    const loginWithKakao = async () => {
-        kakaoSignup();
+    const loginWithKakao = () => {
         try {
-            if (!window.Kakao || !window.Kakao.isInitialized()) {
-                window.Kakao.init(process.env.REACT_APP_KAKAO_JAVASCRIPT_KEY);
-            }
-
-            window.Kakao.Auth.login({
-                success: async (authObj) => {
-                    console.log('Kakao Login Success:', authObj);
-                    const userData = await authApi.loginWithKakao(authObj.access_token);
-                    console.log('Server Response:', userData);
-                    alert('카카오 로그인 성공!');
-                },
-                fail: (err) => {
-                    console.error('Kakao Login Failed:', err);
-                    alert('카카오 로그인에 실패했습니다.');
-                },
-            });
+            authApi.loginWithKakao();
+            console.log('Redirecting to Kakao login...');
         } catch (error) {
-            console.error('Login Failed (Kakao):', error.response?.data?.message || error.message);
-            alert(error.response?.data?.message || '카카오 로그인에 실패했습니다.');
+            console.error('Kakao Login Failed:', error.message);
+            alert('카카오 로그인에 실패했습니다. 다시 시도해주세요.');
         }
     };
 
