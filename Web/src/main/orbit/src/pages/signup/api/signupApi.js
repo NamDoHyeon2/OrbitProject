@@ -22,10 +22,18 @@ export const signup = async (formData) => {
 
 // Google 회원가입 API
 export const googleSignup =async (googleToken) => {
-    const response = await axios.post('http://localhost:3000/google-login', { token: googleToken }, {
-        headers: { 'Content-Type': 'application/json' },
-    });
-    return response.data;
+    try {
+        const response = await axios.post(
+            '/api/members/google-login',
+            { token: googleToken },
+            { headers: { 'Content-Type': 'application/json' } }
+        );
+        console.log('Google 로그인 성공:', response.data);
+        return response.data;
+    } catch (error) {
+        console.error('Google 로그인 실패:', error.response?.data || error.message);
+        throw new Error(error.response?.data?.message || 'Google 로그인 중 오류 발생');
+    }
 };
 
 // Kakao 회원가입 API
