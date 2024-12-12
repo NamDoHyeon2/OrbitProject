@@ -1,4 +1,18 @@
 import authApi from '../api/index';
+import { initializeApp } from "firebase/app";
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyAfGC_Ks-MwsgtqQrVKfC9iOdq25Fpj1Hc",
+    authDomain: "orbit-bbc8f.firebaseapp.com",
+    projectId: "orbit-bbc8f",
+    storageBucket: "orbit-bbc8f.firebasestorage.app",
+    messagingSenderId: "1020053061294",
+    appId: "1:1020053061294:web:1bfdc7f2c59133689e373f"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
 
 export const useAuthModel = () => {
     // 이메일/비밀번호 로그인
